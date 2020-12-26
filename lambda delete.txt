@@ -1,0 +1,35 @@
+var xhr = new XMLHttpRequest();
+xhr.open('DELETE','https://oe9xvhmvj7.execute-api.us-east-1.amazonaws.com/dev/compare-yourself');
+
+xhr.onreadystatechange = function (event){
+  console.log(JSON.parse(event.target.response);
+}
+xhr.setRequestHeader('Content-Type','application/json');
+
+xhr.send();
+_____________________
+const AWS = require('aws-sdk');
+const dynamodb = new AWS.DynamoDB({region: 'us-east-1',apiVersion: '2012-08-10'});
+
+
+exports.handler = (event,context, callback) => {
+    
+    const params = {
+        Key:{
+            "UserId":{
+                S:"dasf787af8safa"
+            }
+        },
+        TableName:"compare-yourself"
+    };
+    dynamodb.deleteItem(params,function(err,data){
+        if(err){
+            console.log(err);
+            callback(err);
+        }else{
+             console.log(data);
+            callback(null,data)
+        }
+    });
+ 
+};

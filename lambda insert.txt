@@ -1,0 +1,46 @@
+var xhr = new XMLHttpRequest();
+xhr.open('POST','https://oe9xvhmvj7.execute-api.us-east-1.amazonaws.com/dev/compare-yourself');
+
+xhr.onreadystatechange = function (event){
+  console.log(event.target.response);
+}
+xhr.setRequestHeader('Content-Type','application/json');
+xhr.send(JSON.stringify({age:26,height:71,income:123}))
+
+___________________________________
+
+const AWS = require('aws-sdk');
+const dynamodb = new AWS.DynamoDB({
+region: 'us-east-1',
+apiVersion: '2012-08-10'
+});
+
+exports.handler =  (event,context,callback) => {
+    const params = {
+        Item: {
+            "UserId": {
+                S: "user_"+Math.random()
+            },
+            "Age": {
+                N:  event.age
+            },
+            "Height": {
+                N: event.height
+            },
+            "Income": {
+                N: event.income
+            }
+        },
+        TableName: "compare-yourself"
+    };
+    
+    dynamodb.putItem(params, function(err, data) {
+        if (err) {
+            console.log(err);
+            callback(err);
+        } else {
+            console.log(data);
+            callback(null, data);
+        }
+    });
+};
